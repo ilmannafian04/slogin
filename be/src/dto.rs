@@ -56,3 +56,15 @@ pub struct StoreBody {
 pub struct RetrieveQuery {
     pub key: String,
 }
+
+#[derive(Deserialize)]
+pub struct SignUpBody {
+    pub username: String,
+    pub password: String,
+}
+
+#[derive(Deserialize)]
+pub struct SignInBody {
+    pub username: String,
+    pub password: String,
+}

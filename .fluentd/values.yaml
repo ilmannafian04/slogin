@@ -1,0 +1,7 @@
+aggregator:
+  configMap: fluentd-out
+  extraEnv:
+    - name: ELASTICSEARCH_HOST
+      value: es-elasticsearch-master
+    - name: ELASTICSEARCH_PORT
+      value: "9200"

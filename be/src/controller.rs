@@ -103,8 +103,12 @@ pub async fn sign_in(
     config: web::Data<Config>,
 ) -> impl Responder {
     match handler::authenticate_user(&db, body.into_inner(), &config.secret_key).await {
-        Some(jwt) => HttpResponse::Ok().json(ResponseBuilder::new().message(jwt).build()),
+        Some(jwt) => {
+            info!("Successfully signed in");
+            HttpResponse::Ok().json(ResponseBuilder::new().message(jwt).build())
+        },
         None => {
+            info!("Failed to sign in");
             let error: Response<()> = ResponseBuilder::new().build();
             HttpResponse::BadRequest().json(error)
         }

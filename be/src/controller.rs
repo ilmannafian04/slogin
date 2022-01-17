@@ -6,7 +6,7 @@ use crate::{
     RedisPool,
 };
 use actix_web::{web, HttpMessage, HttpRequest, HttpResponse, Responder};
-use log::error;
+use log::{error, info};
 use r2d2_redis::redis::Commands;
 use sea_orm::DatabaseConnection;
 
@@ -106,7 +106,7 @@ pub async fn sign_in(
         Some(jwt) => {
             info!("Successfully signed in");
             HttpResponse::Ok().json(ResponseBuilder::new().message(jwt).build())
-        },
+        }
         None => {
             info!("Failed to sign in");
             let error: Response<()> = ResponseBuilder::new().build();

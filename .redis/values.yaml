@@ -4,3 +4,4 @@ master:
 replica:
   persistence:
     enabled: false
+architecture: standalone

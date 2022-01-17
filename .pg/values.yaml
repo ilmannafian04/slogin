@@ -1,4 +1,0 @@
-volumePermissions:
-  enabled: true
-persistence:
-  existingClaim: pg-pv-claim

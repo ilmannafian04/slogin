@@ -1,4 +1,4 @@
-use actix_web::{middleware::Logger, web, App, HttpServer};
+use actix_web::{web, App, HttpServer};
 use log::info;
 use r2d2_redis::RedisConnectionManager;
 use route::routes;
@@ -45,7 +45,6 @@ async fn main() -> std::io::Result<()> {
         App::new()
             .configure(routes)
             .wrap(AuthMiddlewareFactory {})
-            .wrap(Logger::default())
             .app_data(web::Data::new(config_clone.clone()))
             .app_data(web::Data::new(pool.clone()))
             .app_data(web::Data::new(db.clone()))

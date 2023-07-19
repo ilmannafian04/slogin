@@ -12,11 +12,13 @@ use futures::{
 use log::debug;
 use sea_orm::DatabaseConnection;
 
-use crate::{config::Config, entity::users, handler};
+use crate::{config::Config, handler};
+
+use entity::user;
 
 #[derive(Debug)]
 pub struct AuthenticationInfo {
-    pub user: Option<users::Model>,
+    pub user: Option<user::Model>,
 }
 
 pub struct AuthMiddleware<S> {

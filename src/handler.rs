@@ -10,18 +10,17 @@ use sea_orm::{
 use serde::{Deserialize, Serialize};
 use uuid::Uuid;
 
-use crate::{
-    dto::{SignInBody, SignUpBody},
-    entity::users,
-};
+use crate::dto::{SignInBody, SignUpBody};
 
-pub async fn register_user(db: &DatabaseConnection, user: SignUpBody) -> Result<String, DbErr> {
+use entity::user;
+
+pub async fn register_user(db: &DatabaseConnection, payload: SignUpBody) -> Result<String, DbErr> {
     let salt: [u8; 8] = rand::thread_rng().gen();
-    let model: users::ActiveModel = users::ActiveModel {
-        id: Set(Uuid::new_v4().to_simple().to_string()),
-        username: Set(user.username),
+    let model: user::ActiveModel = user::ActiveModel {
+        id: Set(Uuid::new_v4().as_simple().to_string()),
+        username: Set(payload.username),
         password: Set(argon2::hash_encoded(
-            user.password.as_bytes(),
+            payload.password.as_bytes(),
             &salt,
             &argon2::Config::default(),
         )
@@ -29,7 +28,7 @@ pub async fn register_user(db: &DatabaseConnection, user: SignUpBody) -> Result<
         created_at: NotSet,
     };
     debug!("{:?}", model);
-    match users::Entity::insert(model).exec(db).await {
+    match user::Entity::insert(model).exec(db).await {
         Ok(res) => Ok(res.last_insert_id),
         Err(err) => Err(err),
     }
@@ -38,9 +37,9 @@ pub async fn register_user(db: &DatabaseConnection, user: SignUpBody) -> Result<
 pub async fn get_one_by_username(
     db: &DatabaseConnection,
     username: String,
-) -> Result<Option<users::Model>, DbErr> {
-    users::Entity::find()
-        .filter(users::Column::Username.eq(username))
+) -> Result<Option<user::Model>, DbErr> {
+    user::Entity::find()
+        .filter(user::Column::Username.eq(username))
         .one(db)
         .await
 }
@@ -48,8 +47,8 @@ pub async fn get_one_by_username(
 pub async fn get_one_by_id(
     db: &DatabaseConnection,
     id: String,
-) -> Result<Option<users::Model>, DbErr> {
-    users::Entity::find_by_id(id).one(db).await
+) -> Result<Option<user::Model>, DbErr> {
+    user::Entity::find_by_id(id).one(db).await
 }
 
 #[derive(Debug, Serialize, Deserialize)]

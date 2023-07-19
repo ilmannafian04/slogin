@@ -1,5 +1,8 @@
+use std::process::exit;
+
 use actix_web::{web, App, HttpServer};
-use log::info;
+use log::{error, info};
+use migration::{Migrator, MigratorTrait};
 use r2d2_redis::RedisConnectionManager;
 use route::routes;
 use sea_orm::Database;
@@ -9,7 +12,6 @@ use crate::middleware::AuthMiddlewareFactory;
 mod config;
 mod controller;
 mod dto;
-mod entity;
 mod handler;
 mod middleware;
 mod route;
@@ -37,6 +39,12 @@ async fn main() -> std::io::Result<()> {
         .await
         .expect("Cannot connect to database");
 
+    info!("Starting database migration");
+    if let Err(err) = Migrator::up(&db, None).await {
+        error!("Failed to run db migration: {}", err);
+        exit(1)
+    }
+
     info!(
         "Binding server to {}:{}",
         &app_config.host, &app_config.port
@@ -49,7 +57,7 @@ async fn main() -> std::io::Result<()> {
             .app_data(web::Data::new(pool.clone()))
             .app_data(web::Data::new(db.clone()))
     })
-    .bind(format!("{}:{}", &app_config.host, &app_config.port))?
+    .bind((app_config.host, app_config.port))?
     .run()
     .await
 }

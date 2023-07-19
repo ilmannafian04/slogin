@@ -2,8 +2,7 @@
   import { goto } from '$app/navigation';
 
   import api from '$lib/api';
-  import { JWT_KEY } from '$lib/constant';
-  import type { User } from 'src';
+  import type { User } from '../..';
 
   const formData: User = {
     username: '',
@@ -11,11 +10,8 @@
   };
   const submitHandler = () => {
     api
-      .signin(formData)
-      .then((jwt) => {
-        localStorage.setItem(JWT_KEY, jwt);
-        goto('/');
-      })
+      .signup(formData)
+      .then(() => goto('/signin'))
       .catch(console.error);
   };
 </script>

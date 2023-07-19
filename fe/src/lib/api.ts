@@ -1,4 +1,4 @@
-import type { User } from 'src';
+import type { User } from '..';
 import { JWT_KEY } from './constant';
 
 interface APIResponse<T> {
@@ -14,7 +14,7 @@ const handleResponse = async <T>(response: Response): Promise<T> => {
   let jsonResponse: APIResponse<T>;
   try {
     jsonResponse = await response.json();
-  } catch (e) {
+  } catch (e: any) {
     throw new Error(e);
   }
   return jsonResponse.message;
@@ -25,19 +25,19 @@ const headerBuilder = function () {
   let withAuth = false;
   return {
     withAuth: function () {
-      this.withAuth = true;
+      withAuth = true;
       return this;
     },
     json: function () {
-      this.isJson = true;
+      isJson = true;
       return this;
     },
     build: function (): HeadersInit {
       let header: HeadersInit = {};
-      if (this.withAuth) {
+      if (withAuth) {
         header.Authorization = `Bearer ${localStorage.getItem(JWT_KEY)}`;
       }
-      if (this.isJson) {
+      if (isJson) {
         header['Content-Type'] = 'application/json';
       }
       return header;

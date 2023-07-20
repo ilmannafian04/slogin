@@ -3,6 +3,7 @@
 
   import api from '$lib/api';
   import { JWT_KEY } from '$lib/constant';
+  import { userStatus } from '$lib/stores/user';
   import type { User } from '../..';
 
   const formData: User = {
@@ -15,6 +16,12 @@
       .then((jwt) => {
         localStorage.setItem(JWT_KEY, jwt);
         goto('/');
+      })
+      .then(() => {
+        userStatus.update((status) => {
+          status.isSignedIn = true;
+          return status;
+        });
       })
       .catch(console.error);
   };

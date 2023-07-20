@@ -15,7 +15,7 @@ jobs:
       docker-hub-access-token: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
   deploy:
     needs: build
-    uses: ilmannafian04/dot-github/.github/workflows/nomad.yml@v0.1.1
+    uses: ilmannafian04/dot-github/.github/workflows/nomad.yml@v0.1.2
     with:
       address: https://nomad.ilmannfn.com
       job-file: slogin.nomad

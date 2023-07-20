@@ -1,4 +1,0 @@
-elasticsearch:
-  hosts:
-    - es-elasticsearch-data
-  port: 9200

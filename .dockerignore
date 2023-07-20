@@ -1,2 +1,8 @@
-be/target
+.chart
+.github
+.kubernetes
+target
+.env
+fe/.svelte-kit
+fe/build
 fe/node_modules

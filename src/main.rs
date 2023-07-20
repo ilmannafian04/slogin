@@ -13,8 +13,11 @@ mod config;
 mod controller;
 mod dto;
 mod handler;
+mod handlers;
 mod middleware;
 mod route;
+mod services;
+mod storages;
 
 pub type RedisPool = r2d2::Pool<RedisConnectionManager>;
 

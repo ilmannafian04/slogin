@@ -929,7 +929,7 @@ dependencies = [
 
 [[package]]
 name = "entity"
-version = "0.4.0"
+version = "0.4.1"
 dependencies = [
  "sea-orm",
 ]
@@ -1521,7 +1521,7 @@ checksum = "2dffe52ecf27772e601905b7522cb4ef790d2cc203488bbd0e2fe85fcb74566d"
 
 [[package]]
 name = "migration"
-version = "0.4.0"
+version = "0.4.1"
 dependencies = [
  "async-std",
  "sea-orm-migration",
@@ -2536,7 +2536,7 @@ dependencies = [
 
 [[package]]
 name = "slogin-be"
-version = "0.4.0"
+version = "0.4.1"
 dependencies = [
  "actix-service",
  "actix-web",

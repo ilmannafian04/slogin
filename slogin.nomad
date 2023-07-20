@@ -87,7 +87,7 @@ job "slogin" {
 
       env {
         SECRET_KEY   = var.secret_key
-        REDIS_URL    = "redis://${var.redis_config.password}@${NOMAD_UPSTREAM_ADDR_redis}/${var.redis_config.db}"
+        REDIS_URL    = "redis://:${var.redis_config.password}@${NOMAD_UPSTREAM_ADDR_redis}/${var.redis_config.db}"
         DATABASE_URL = "postgres://${var.postgres_config.username}:${var.postgres_config.password}@${NOMAD_UPSTREAM_ADDR_postgres}/${var.postgres_config.db}"
 
         HOST = "127.0.0.1"

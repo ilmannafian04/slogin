@@ -6,7 +6,7 @@ on:
 
 jobs:
   build:
-    uses: ilmannafian04/dot-github/.github/workflows/docker.yml@v0.1.0
+    uses: ilmannafian04/dot-github/.github/workflows/docker.yml@v0.2.1
     with:
       username: ilmannafian
       repository: ilmannafian
@@ -15,7 +15,7 @@ jobs:
       docker-hub-access-token: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
   deploy:
     needs: build
-    uses: ilmannafian04/dot-github/.github/workflows/nomad.yml@v0.1.2
+    uses: ilmannafian04/dot-github/.github/workflows/nomad.yml@v0.2.1
     with:
       address: https://nomad.ilmannfn.com
       job-file: slogin.nomad

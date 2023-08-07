@@ -22,7 +22,7 @@ variable "redis_config" {
 }
 
 job "slogin" {
-  datacenters = ["ln-sg"]
+  datacenters = ["sg-ln"]
 
   group "slogin" {
     network {

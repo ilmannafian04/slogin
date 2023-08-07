@@ -27,40 +27,41 @@ async fn main() -> std::io::Result<()> {
     env_logger::init();
     info!("Starting server");
 
-    let app_config = crate::config::Config::new();
-    let config_clone = app_config.clone();
+    let app_config = web::Data::new(crate::config::Config::new());
 
     info!("Connecting to redis");
     let redis_conn_manager =
         RedisConnectionManager::new(app_config.redis_url.clone()).expect("Cannot connect to redis");
-    let pool = r2d2::Pool::builder()
-        .build(redis_conn_manager)
-        .expect("Cannot create connection pool");
+    let redis_pool = web::Data::new(
+        r2d2::Pool::builder()
+            .build(redis_conn_manager)
+            .expect("Cannot create connection pool"),
+    );
 
     info!("Connecting to database");
-    let db = Database::connect(&app_config.database_url)
-        .await
-        .expect("Cannot connect to database");
+    let db = web::Data::new(
+        Database::connect(&app_config.database_url)
+            .await
+            .expect("Cannot connect to database"),
+    );
 
     info!("Starting database migration");
-    if let Err(err) = Migrator::up(&db, None).await {
+    if let Err(err) = Migrator::up(db.as_ref(), None).await {
         error!("Failed to run db migration: {}", err);
         exit(1)
     }
 
-    info!(
-        "Binding server to {}:{}",
-        &app_config.host, &app_config.port
-    );
+    let bind_address = (app_config.host.clone(), app_config.port);
+    info!("Binding server to {}:{}", bind_address.0, bind_address.1);
     HttpServer::new(move || {
         App::new()
             .configure(routes)
             .wrap(AuthMiddlewareFactory {})
-            .app_data(web::Data::new(config_clone.clone()))
-            .app_data(web::Data::new(pool.clone()))
-            .app_data(web::Data::new(db.clone()))
+            .app_data(app_config.clone())
+            .app_data(redis_pool.clone())
+            .app_data(db.clone())
     })
-    .bind((app_config.host, app_config.port))?
+    .bind(bind_address)?
     .run()
     .await
 }

@@ -37,7 +37,7 @@ job "slogin" {
       tags = [
         "traefik.enable=true",
         "traefik.consulcatalog.connect=true",
-        "traefik.http.routers.slogin.rule=Host(`slogin.ilmannfn.com`)",
+        "traefik.http.routers.slogin.rule=Host(`slogin.ilman.io`)",
         "traefik.http.routers.slogin.entrypoints=websecure",
         "traefik.http.routers.slogin.tls=true",
         "traefik.http.routers.slogin.tls.certResolver=cloudflareResolver",

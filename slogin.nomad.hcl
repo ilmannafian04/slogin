@@ -22,6 +22,7 @@ variable "redis_config" {
 }
 
 job "slogin" {
+  region      = "id"
   datacenters = ["id-dpk"]
 
   group "slogin" {

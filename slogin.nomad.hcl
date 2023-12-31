@@ -22,7 +22,7 @@ variable "redis_config" {
 }
 
 job "slogin" {
-  datacenters = ["sg-ln"]
+  datacenters = ["id-dpk"]
 
   group "slogin" {
     network {
@@ -34,14 +34,6 @@ job "slogin" {
     service {
       name = "slogin"
       port = "8080"
-      tags = [
-        "traefik.enable=true",
-        "traefik.consulcatalog.connect=true",
-        "traefik.http.routers.slogin.rule=Host(`slogin.ilman.io`)",
-        "traefik.http.routers.slogin.entrypoints=websecure",
-        "traefik.http.routers.slogin.tls=true",
-        "traefik.http.routers.slogin.tls.certResolver=cloudflareResolver",
-      ]
 
       connect {
         sidecar_service {
@@ -60,8 +52,8 @@ job "slogin" {
 
         sidecar_task {
           resources {
-            cpu    = 25
-            memory = 25
+            cpu    = 100
+            memory = 50
           }
         }
       }
@@ -97,8 +89,8 @@ job "slogin" {
       }
 
       resources {
-        cpu    = "10"
-        memory = "10"
+        cpu    = 50
+        memory = 20
       }
     }
   }
